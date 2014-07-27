@@ -71,6 +71,12 @@ Cursor.prototype._load = function () {
         });
 };
 
+function compact ( from, to ) {
+    new Cursor( from )
+        .find({})
+        .pipe( new Cursor( to ) );
+}
+
 module.exports.connect = function ( file ) {
     util.inherits( FilesystemCursor, Cursor );
     function FilesystemCursor () {
@@ -79,6 +85,6 @@ module.exports.connect = function ( file ) {
 
     return {
         Cursor: FilesystemCursor,
-        compact: function() { compact( file ); }
+        compact: function( to ) { compact( file, to ); }
     }
 }
