@@ -89,7 +89,7 @@ module.exports.connect = function ( file ) {
 
     // create the file if it doesn't exist
     if ( !fs.existsSync( file ) ) {
-        fs.appendFileSync( file, " " );
+        fs.appendFileSync( file, "\n" );
     }
 
     return {
