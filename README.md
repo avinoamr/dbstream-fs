@@ -36,7 +36,7 @@ This module implements the [dbstream](https://github.com/avinoamr/dbstream) API.
 ###### connect( [file-path] )
 
 * `file-path` a String path to the database file to be used
-* Returns a dbstream [Cursor](https://github.com/avinoamr/dbstream#cursor) object
+* Returns a dbstream [Connection](https://github.com/avinoamr/dbstream#connection) object
 
 ###### Connection.compact( destination-path )
 
