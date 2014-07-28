@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "dbstream": "git+https://github.com/avinoamr/dbstream",
+    "fs-reverse": "0.0.2",
     "sift": "0.0.18"
   }
 }
