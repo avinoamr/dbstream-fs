@@ -37,7 +37,10 @@ Cursor.prototype._load = function () {
     var that = this;
 
     var seen = {};
-    fs_reverse( this._file )
+    fs_reverse( this._file, { flags: "r" } )
+        .on( "error", function ( err ) {
+            that.emit( "error", err );
+        })
         .on( "data", function ( obj ) {
             // skip everything past the limit
             if ( limit <= 0 ) return;
@@ -67,6 +70,7 @@ Cursor.prototype._load = function () {
             
         })
         .on( "end", function() {
+            that.push( null );
             that._loading = false;
         });
 };
@@ -81,6 +85,11 @@ module.exports.connect = function ( file ) {
     util.inherits( FilesystemCursor, Cursor );
     function FilesystemCursor () {
         FilesystemCursor.super_.call( this, file );
+    }
+
+    // create the file if it doesn't exist
+    if ( !fs.existsSync( file ) ) {
+        fs.appendFileSync( file, " " );
     }
 
     return {
