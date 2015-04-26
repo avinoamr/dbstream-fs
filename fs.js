@@ -37,6 +37,7 @@ Cursor.prototype._load = function () {
     var that = this;
 
     var seen = {};
+    var results = [];
     fs_reverse( this._file, { flags: "r" } )
         .on( "error", function ( err ) {
             that.emit( "error", err );
@@ -62,14 +63,12 @@ Cursor.prototype._load = function () {
             if ( !sifter.test( obj ) ) return;
 
             if ( skip-- <= 0 ) {
-                that.push( obj );
-                if ( --limit <= 0 ) {
-                    that.push( null );
-                }
+                results.push( obj );
             }
             
         })
         .on( "end", function() {
+            results.reverse().forEach( that.push.bind( that ) );
             that.push( null );
             that._loading = false;
         });

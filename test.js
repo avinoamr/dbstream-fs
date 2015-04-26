@@ -1,4 +1,5 @@
 var stream = require( "stream" );
+var assert = require( "assert" );
 var fs = require( "fs" );
 var fs_reverse = require( "fs-reverse" );
 
@@ -20,6 +21,31 @@ describe( "Filesystem", function () {
                 done();
             })
     });
+
+    it( "Loads data in order", function ( done ) {
+        var connection = db.connect( "dbfile3" );
+        var writer = new connection.Cursor();
+        writer.write( { id: 1, name: "hello" } );
+        writer.write( { id: 2, name: "world" } );
+        writer.write( { id: 1, name: "foo" } );
+        writer.write( { id: 2, name: "bar" } );
+        writer.end();
+
+        writer.on( "finish", function () {
+            var reader = new connection.Cursor().find({})
+            var results = []
+            reader.on( "data", results.push.bind( results ) );
+            reader.on( "end", function () {
+                assert.deepEqual( results, [ 
+                    { id: 1, name: "foo" },
+                    { id: 2, name: "bar" }
+                ]);
+                done();
+            })
+        })
+
+
+    })
 
     it( "Implements the API", test( db.connect( "dbfile1" ) ) )
 });
