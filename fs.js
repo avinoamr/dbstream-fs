@@ -75,7 +75,7 @@ Cursor.prototype._load = function () {
 };
 
 function compact ( from, to ) {
-    new Cursor( from )
+    return new Cursor( from )
         .find({})
         .pipe( new Cursor( to ) );
 }
@@ -93,6 +93,6 @@ module.exports.connect = function ( file ) {
 
     return {
         Cursor: FilesystemCursor,
-        compact: function( to ) { compact( file, to ); }
+        compact: function( to ) { return compact( file, to ); }
     }
 }

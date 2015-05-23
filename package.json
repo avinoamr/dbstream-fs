@@ -1,6 +1,6 @@
 {
   "name": "dbstream-fs",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "File-system based database compatible with the Database Stream API",
   "main": "fs.js",
   "scripts": {
