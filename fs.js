@@ -64,6 +64,7 @@ Cursor.prototype._load = function () {
 
             if ( skip-- <= 0 ) {
                 results.push( obj );
+                limit -= 1;
             }
             
         })
