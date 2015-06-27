@@ -17,7 +17,7 @@ function Cursor ( file ) {
 
 Cursor.prototype._save = function( obj, callback ) {
     if ( !obj.id ) {
-        obj.id = ( Math.random() * 1e17 ).toString( 36 );
+        obj.id = Math.random().toString( 36 ).substr( 2 );
     }
     fs.appendFile( this._file, JSON.stringify( obj ) + "\n", callback );
 };
