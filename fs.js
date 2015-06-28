@@ -34,6 +34,7 @@ Cursor.prototype._load = function () {
     var sifter = sift( this._query );
     var limit = this._limit || Infinity;
     var skip = this._skip || 0;
+    var sort = this._sort || [];
     var that = this;
 
     var seen = {};
@@ -43,13 +44,11 @@ Cursor.prototype._load = function () {
             that.emit( "error", err );
         })
         .on( "data", function ( obj ) {
-            // skip everything past the limit
-            if ( limit <= 0 ) return;
-
+            if ( !obj.trim() ) return; // skip empty lines
             try {
                 obj = JSON.parse( obj.trim() );
-            } catch ( e ) {
-                return;
+            } catch ( err ) {
+                return this.emit( "error", err );
             }
 
             // skip seen objects
@@ -61,15 +60,23 @@ Cursor.prototype._load = function () {
 
             // skip objects that don't meet the query criteria
             if ( !sifter.test( obj ) ) return;
-
-            if ( skip-- <= 0 ) {
-                results.push( obj );
-                limit -= 1;
-            }
-            
+            results.push( obj );
         })
         .on( "end", function() {
-            results.reverse().forEach( that.push.bind( that ) );
+            results.reverse()
+            results.sort( function ( d1, d2 ) {
+                for ( var s = 0 ; s < sort.length ; s += 1 ) {
+                    s = sort[ s ];
+                    if ( d1[ s.key ] == d2[ s.key ] ) continue;
+                    return d1[ s.key ] > d2[ s.key ] 
+                        ? s.direction : -s.direction;
+                }
+                return 0;
+            })
+
+            results.splice( 0, skip )
+            results.splice( limit );
+            results.forEach( that.push.bind( that ) );
             that.push( null );
             that._loading = false;
         });

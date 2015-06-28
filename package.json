@@ -1,6 +1,6 @@
 {
   "name": "dbstream-fs",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "File-system based database compatible with the Database Stream API",
   "main": "fs.js",
   "scripts": {
@@ -27,7 +27,7 @@
     "mocha": "^1.21.0"
   },
   "dependencies": {
-    "dbstream": "git+https://github.com/avinoamr/dbstream",
+    "dbstream": "^1.0.1",
     "fs-reverse": "0.0.2",
     "sift": "0.0.18"
   }
